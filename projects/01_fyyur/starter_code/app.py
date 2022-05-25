@@ -16,9 +16,11 @@ from forms import *
 # App Config.
 #----------------------------------------------------------------------------#
 
-app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True)
 moment = Moment(app)
-app.config.from_object('config')
+app.config.from_object('config.default')
+app.config.from_pyfile('config.py')
+app.config.from_envvar('APP_CONFIG_FILE')
 db = SQLAlchemy(app)
 
 # TODO: connect to a local postgresql database
@@ -514,8 +516,7 @@ if __name__ == '__main__':
     app.run()
 
 # Or specify port manually:
-'''
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
-'''
